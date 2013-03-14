@@ -8,14 +8,15 @@ from database import db
 
 from config import PINS_TTL, \
 				   AUTORELOAD_AFTER, \
-				   IGNORE_AFTER
+				   IGNORE_AFTER, \
+				   PROBE_INTERVAL
 
 class Updater (object):
 	def __init__(self):
 		pass
 
 	def is_up_to_date (self, user, board=None, ttl=PINS_TTL):
-		return db.did_update_within (PINS_TTL, user, board)	
+		return db.did_update_within (ttl, user, board)	
 
 	def update_now (self, user, board=None, cb=None):
 		if board is None:
@@ -30,6 +31,15 @@ class Updater (object):
 				cb ()
 		else:
 			self.update_now (user, board, cb)
+
+	def update_what_needs_updating (self):
+		"""
+		Find feeds that have been recently accessed and are
+		out of date.
+		"""
+		for user in db.get_requested_within (IGNORE_AFTER):
+			if not self.is_up_to_date (user, ttl=AUTORELOAD_AFTER):
+				self.update_now (user)
 
 
 class FeedUpdater (object):

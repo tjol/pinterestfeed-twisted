@@ -21,6 +21,9 @@ _QUERIES = {
 		'updates_board':
 			r'''SELECT "time" FROM "updates" ''' +
 			r'''WHERE "user" = ? AND "board" = ?''',
+		'requested_since':
+			r'''SELECT "user" FROM "requests" ''' +
+			r'''WHERE  DATETIME("time") >= DATETIME(?)''',
 		'get_user_pins':
 			r'''SELECT "url", "date", "user", "board", "img", "caption", "source" ''' +
 			r'''FROM "pins" WHERE "user" = ? ORDER BY "date" DESC LIMIT ?''',
@@ -32,7 +35,7 @@ _QUERIES = {
 			r'''VALUES (?, ?, ?)''',
 		'register_request':
 			r'''INSERT INTO "requests" ("user", "time") ''' +
-			r'''VALUES (?, ?, ?)'''
+			r'''VALUES (?, ?)'''
 	}
 } [DATABASE_TYPE]
 
@@ -98,6 +101,20 @@ class Database (object):
 
 		curs.close ()
 		return True
+
+	def get_requested_within (self, tdelta):
+		"""
+		Returns a set of users whose feeds have been requested within the
+		last [tdelta]
+		"""
+		curs = self._connection.cursor ()
+		curs.execute (_QUERIES['requested_since'], [datetime.now () - tdelta])
+
+		users = set ()
+		for row in curs:
+			users.add (row[0])
+
+		return users
 
 	def get_pins (self, user, board=None, limit=FEED_LENGTH):
 		from pins import Pin

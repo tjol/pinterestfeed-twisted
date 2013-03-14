@@ -60,7 +60,10 @@ class Pin (object):
 
 		self._get_better_image ()
 		self._loaded = True
-		self._save_to_db ()
+		try:
+			self._save_to_db ()
+		except:
+			pass
 		self._loaded_cb (self)
 
 

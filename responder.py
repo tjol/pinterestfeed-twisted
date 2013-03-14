@@ -48,6 +48,8 @@ class FeedResource (Resource):
 		request.write (rss.to_xml (encoding='UTF-8'))
 		request.finish ()
 
+		db.register_request (self._user)
+
 
 class UserFeed (FeedResource):
 	def __init__ (self, user):

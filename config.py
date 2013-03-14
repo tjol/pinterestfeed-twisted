@@ -31,8 +31,9 @@ PORT = 8080
 
 # TIMES TO LIVE
 PINS_TTL = timedelta (minutes=30)
-AUTORELOAD_AFTER = timedelta (minutes=20)
+AUTORELOAD_AFTER = timedelta (minutes=13)
 IGNORE_AFTER = timedelta (days=1)
+PROBE_INTERVAL = timedelta (minutes=5)
 
 # Number of items to display in a feed
 FEED_LENGTH = 20
