@@ -35,8 +35,8 @@ useful modules:
 Configuration
 -------------
 
-A database needs to be set up and configured. The comments in `config.py`
-should be self explanatory.
+A database needs to be set up and configured. The supported database engines
+are sqlite3 and MySql. The comments in `config.py` should be self explanatory.
 
 To run, start `runserver.py`.
 
