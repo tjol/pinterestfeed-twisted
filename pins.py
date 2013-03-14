@@ -101,7 +101,7 @@ class Pin (object):
 	@property
 	def html (self):
 		return ( u'''<p><a href="{0}"><img src="{1}" alt="{2}"></a></a>'''
-				 .format (self.url, self.img_url, self.caption))
+				 .format (self.url, self.img_url, unicode(self.caption, 'UTF-8', 'replace')))
 
 
 def get_pins_from_rss (rss):

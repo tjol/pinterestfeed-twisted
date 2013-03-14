@@ -36,6 +36,36 @@ _QUERIES = {
 		'register_request':
 			r'''INSERT INTO "requests" ("user", "time") ''' +
 			r'''VALUES (?, ?)'''
+	},
+	'mysql': {
+		'get_pin':
+			r'''SELECT `date`, `user`, `board`, `img`, `caption`, `source` ''' +
+			r'''FROM `pins` WHERE `url`=%s''',
+		'save_pin':
+			r'''INSERT INTO `pins` ''' + 
+			r'''(`url`, `date`, `user`, `board`, `img`, `caption`, `source`) ''' +
+			r'''VALUES (%s, %s, %s, %s, %s, %s, %s)''',
+		'updates_since':
+			r'''SELECT `time` FROM `updates` ''' +
+			r'''WHERE `user` = %s AND `board` IS NULL AND `time` >= %s''',
+		'updates_board':
+			r'''SELECT `time` FROM `updates` ''' +
+			r'''WHERE `user` = %s AND `board` = %s''',
+		'requested_since':
+			r'''SELECT `user` FROM `requests` ''' +
+			r'''WHERE  `time` >= %s''',
+		'get_user_pins':
+			r'''SELECT `url`, `date`, `user`, `board`, `img`, `caption`, `source` ''' +
+			r'''FROM `pins` WHERE `user` = %s ORDER BY `date` DESC LIMIT %s''',
+		'get_board_pins':
+			r'''SELECT `url`, `date`, `user`, `board`, `img`, `caption`, `source` ''' +
+			r'''FROM `pins` WHERE `user` = %s AND `board` = %s ORDER BY `date` DESC LIMIT %s''',
+		'register_update':
+			r'''INSERT INTO `updates` (`user`, `board`, `time`) ''' +
+			r'''VALUES (%s, %s, %s)''',
+		'register_request':
+			r'''INSERT INTO `requests` (`user`, `time`) ''' +
+			r'''VALUES (%s, %s)'''
 	}
 } [DATABASE_TYPE]
 
@@ -55,7 +85,9 @@ class Database (object):
 		self._connection = sqlite3.connect (SQLITE3_DATABASE)
 
 	def _init_mysql (self):
-		pass
+		import MySQLdb
+		from config import MYSQL_PARAMETERS
+		self._connection = MySQLdb.connect (**MYSQL_PARAMETERS)
 
 	def get_pin (self, url):
 		curs = self._connection.cursor ()

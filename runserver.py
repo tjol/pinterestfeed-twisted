@@ -8,11 +8,12 @@ from responder import TopLevel
 from updater import updater
 
 from config import PORT, \
-				   PROBE_INTERVAL
+				   PROBE_INTERVAL, \
+				   LISTEN_ON
 
-reactor.listenTCP (PORT, server.Site(TopLevel ()))
+reactor.listenTCP (PORT, server.Site(TopLevel ()), interface=LISTEN_ON)
 
 loop = task.LoopingCall (updater.update_what_needs_updating)
-loop.start (PROBE_INTERVAL.total_seconds ())
+loop.start (PROBE_INTERVAL.seconds)
 
 reactor.run()

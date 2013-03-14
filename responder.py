@@ -10,6 +10,8 @@ from database import db
 
 class TopLevel (Resource):
 	def getChild (self, path, request):
+		if path == 'favicon.ico':
+			return None
 		return UserFeed (path)
 
 class FeedResource (Resource):
@@ -17,6 +19,7 @@ class FeedResource (Resource):
 	children = []
 
 	def render_GET (self, request):
+		db.register_request (self._user)
 		updater.update_if_necessary (self._user, self._board,
 									 partial(self.output_feed, request))
 		return server.NOT_DONE_YET
@@ -47,8 +50,6 @@ class FeedResource (Resource):
 		request.setHeader ('Content-Type', 'application/rss+xml')
 		request.write (rss.to_xml (encoding='UTF-8'))
 		request.finish ()
-
-		db.register_request (self._user)
 
 
 class UserFeed (FeedResource):
