@@ -4,7 +4,7 @@
 # 
 # Copyright (C) 2013 Thomas Jollans
 #   This program is free software subject to the conditions of the AGPL,
-#   version 3 or newer. For details, see README.md and AGPL.txt
+#   version 3 or any later version. For details, see README.md and AGPL.txt
 
 from twisted.web import client
 from functools import partial
