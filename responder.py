@@ -1,4 +1,10 @@
 # responder.py
+# 
+# pinterestfeed2 - Pinterest RSS feed generator
+# 
+# Copyright (C) 2013 Thomas Jollans
+#   This program is free software subject to the conditions of the AGPL,
+#   version 3 or newer. For details, see README.md and AGPL.txt
 
 from twisted.web.resource import Resource
 from twisted.web import server
